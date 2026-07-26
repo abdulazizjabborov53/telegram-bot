@@ -1,23 +1,29 @@
+import os
 import asyncio
-from aiogram import Bot, Dispatcher, types
+from pyrogram import Client, filters
 
-# BotFather'dan olingan token
-BOT_TOKEN = "8882163183:AAGeHzRrXf1mn6dapaSozjTf3DRk2m1w_jI"
+# Render muhitidan olinadigan maxfiy kalitlar
+API_ID = os.environ.get("API_ID")
+API_HASH = os.environ.get("API_HASH")
+SESSION_STRING = os.environ.get("SESSION_STRING")
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+app = Client(
+    "my_userbot",
+    api_id=int(API_ID) if API_ID else None,
+    api_hash=API_HASH,
+    session_string=SESSION_STRING
+)
 
-# Botga kelgan har qanday xabarga avto-javob qaytarish
-@dp.message()
-async def auto_reply(message: types.Message):
-    reply_text = (
-        "Assalomu Alaykum"
-    )
-    await message.reply(reply_text)
-
-async def main():
-    print("Bot muvaffaqiyatli ishga tushdi va xabarlarni kutmoqda...")
-    await dp.start_polling(bot)
+# Faqat shaxsiy chatlarga (PM) kelgan va siz yubormagan xabarlarga javob qaytaradi
+@app.on_message(filters.private & ~filters.me)
+async def auto_reply(client, message):
+    # Avto-javob matni (xohlagan matningizni yozishingiz mumkin)
+    reply_text = "Assalomu alaykum! Hozir bandman, tez orada javob yozaman."
+    
+    # Biroz kutish (odam yozayotgandek natural ko'rinishi uchun)
+    await asyncio.sleep(2)
+    await message.reply_text(reply_text)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    print("Userbot ishga tushdi...")
+    app.run()
