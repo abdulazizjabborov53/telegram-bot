@@ -14,7 +14,7 @@ app = Client(
     session_string=SESSION_STRING
 )
 
-# Faqat shaxsiy chatlarga (PM) kelgan va siz yubormagan xabarlarga javob qaytaradi
+# Shaxsiy chatlarga kelgan xabarlarga avto-javob
 @app.on_message(filters.private & ~filters.me)
 async def auto_reply(client, message):
     reply_text = "Assalomu alaykum! Hozir bandman, tez orada javob yozaman."
@@ -23,8 +23,8 @@ async def auto_reply(client, message):
 
 async def main():
     async with app:
-        print("Userbot muvaffaqiyatli ishga tushdi va ishlamoqda...")
-        await asyncio.Event().wait()  # Botni doimiy ochiq ushlab turadi
+        print("Userbot muvaffaqiyatli ishga tushdi...")
+        await asyncio.Future()  # Botni cheksiz ishlatib turadi
 
 if __name__ == "__main__":
     asyncio.run(main())
