@@ -1,8 +1,15 @@
-import os
 import asyncio
+import os
+
+# Pyrogram import bo'lishidan oldin event loop o'rnatamiz
+try:
+    loop = asyncio.get_event_loop()
+except RuntimeError:
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
 from pyrogram import Client, filters
 
-# Render muhitidan olinadigan maxfiy kalitlar
 API_ID = os.environ.get("API_ID")
 API_HASH = os.environ.get("API_HASH")
 SESSION_STRING = os.environ.get("SESSION_STRING")
@@ -14,17 +21,15 @@ app = Client(
     session_string=SESSION_STRING
 )
 
-# Shaxsiy chatlarga kelgan xabarlarga avto-javob
 @app.on_message(filters.private & ~filters.me)
 async def auto_reply(client, message):
-    reply_text = "Assalomu alaykum! Hozir bandman, tez orada javob yozaman."
     await asyncio.sleep(2)
-    await message.reply_text(reply_text)
+    await message.reply_text("Assalomu alaykum! Hozir bandman, tez orada javob yozaman.")
 
-async def main():
+async def start_bot():
     async with app:
-        print("Userbot muvaffaqiyatli ishga tushdi...")
-        await asyncio.Future()  # Botni cheksiz ishlatib turadi
+        print("Userbot muvaffaqiyatli ishga tushdi!")
+        await asyncio.Event().wait()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop.run_until_complete(start_bot())
