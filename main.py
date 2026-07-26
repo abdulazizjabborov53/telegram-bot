@@ -17,13 +17,14 @@ app = Client(
 # Faqat shaxsiy chatlarga (PM) kelgan va siz yubormagan xabarlarga javob qaytaradi
 @app.on_message(filters.private & ~filters.me)
 async def auto_reply(client, message):
-    # Avto-javob matni (xohlagan matningizni yozishingiz mumkin)
     reply_text = "Assalomu alaykum! Hozir bandman, tez orada javob yozaman."
-    
-    # Biroz kutish (odam yozayotgandek natural ko'rinishi uchun)
     await asyncio.sleep(2)
     await message.reply_text(reply_text)
 
+async def main():
+    async with app:
+        print("Userbot muvaffaqiyatli ishga tushdi va ishlamoqda...")
+        await asyncio.Event().wait()  # Botni doimiy ochiq ushlab turadi
+
 if __name__ == "__main__":
-    print("Userbot ishga tushdi...")
-    app.run()
+    asyncio.run(main())
